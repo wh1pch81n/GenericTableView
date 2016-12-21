@@ -49,6 +49,11 @@ final class GTVCell: NSObject {
 		return self
 	}
 	
+	fileprivate var _tableView_didSelectRowAtIndexPath: (UITableView, IndexPath) -> () = { _ in }
+	public func setBlock_didSelectRowAtIndexPath(_ block: @escaping (UITableView, IndexPath) -> ()) -> Self {
+		_tableView_didSelectRowAtIndexPath = block
+		return self
+	}
 }
 
 /**
@@ -56,7 +61,7 @@ UITableView subclass
 */
 @IBDesignable
 final class GenericTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
-		
+	
 	override init(frame: CGRect, style: UITableViewStyle) {
 		super.init(frame: frame, style: style)
 		dataSource = self
@@ -102,4 +107,9 @@ final class GenericTableView: UITableView, UITableViewDelegate, UITableViewDataS
 			._tableView_heightForRowAtIndexPath(tableView, indexPath)
 	}
 
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		return dataSourceArray[indexPath.section]._cells[indexPath.row]
+			._tableView_didSelectRowAtIndexPath(tableView, indexPath)
+	}
+	
 }

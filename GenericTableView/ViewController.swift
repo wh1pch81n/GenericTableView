@@ -32,41 +32,25 @@ class View: UIView {
 		bottomAnchor.constraint(equalTo: tableView.bottomAnchor).isActive = true
 		
 		tableView.dataSourceArray = [
-			GTVSection().setHeaderTitle("apple")
+			GTVSection()
 				.setCells([
 					GTVCell()
-						.setBlock_cellForRowAtIndexPath({ (UITableView, IndexPath) -> UITableViewCell in
-							let cell = UITableViewCell()
-							cell.contentView.backgroundColor = .red
+						.setBlock_cellForRowAtIndexPath({ _ in
+							let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+							cell.textLabel!.text = "Apple"
 							return cell
 						})
-					])
-				.setFooterTitle("tree")
-			, GTVSection().setHeaderTitle("Banana")
-				.setCells([
-					GTVCell()
-						.setBlock_cellForRowAtIndexPath({ (UITableView, IndexPath) -> UITableViewCell in
-							let cell = UITableViewCell()
-							cell.contentView.backgroundColor = .yellow
+						.setBlock_didSelectRowAtIndexPath({ _ in
+							print("pressed Apple")
+						})
+					, GTVCell()
+						.setBlock_cellForRowAtIndexPath({ _ in
+							let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+							cell.textLabel!.text = "Banana"
 							return cell
 						})
-					])
-			, GTVSection().setHeaderTitle("orange")
-				.setCells([
-					GTVCell()
-						.setBlock_cellForRowAtIndexPath({ (UITableView, IndexPath) -> UITableViewCell in
-							let cell = UITableViewCell()
-							cell.contentView.backgroundColor = .orange
-							return cell
-						})
-					])
-			, GTVSection().setHeaderTitle("Grape")
-				.setCells([
-					GTVCell()
-						.setBlock_cellForRowAtIndexPath({ (UITableView, IndexPath) -> UITableViewCell in
-							let cell = UITableViewCell()
-							cell.contentView.backgroundColor = .purple
-							return cell
+						.setBlock_didSelectRowAtIndexPath({ _ in
+							UIAlertView(title: nil, message: "pressed bananna", delegate: nil, cancelButtonTitle: "ok").show()
 						})
 					])
 		]
@@ -88,4 +72,34 @@ class ViewController: UIViewController {
 
 
 }
+
+class OldViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+	var tableView: UITableView = UITableView()
+	
+	var array = ["Apple", "Bananna"]
+	
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return array.count
+	}
+	
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: nil)
+		if indexPath.row == 0 {
+			cell.textLabel!.text = array[indexPath.row]
+		} else if indexPath.row == 1 {
+			cell.textLabel!.text = array[indexPath.row]
+		}
+		return cell
+	}
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		if indexPath.row == 0 {
+			print("pressed Apple")
+		} else if indexPath.row == 1 {
+			UIAlertView(title: nil, message: "pressed bananna", delegate: nil, cancelButtonTitle: "ok").show()
+		}
+	}
+	
+}
+
 
